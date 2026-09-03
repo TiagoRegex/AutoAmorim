@@ -107,7 +107,7 @@ class ConsultaView(ctk.CTkFrame):
                     command=lambda c=cli: self.eliminar_cliente(c),
                 ).pack(side="left", padx=4)
 
-        # 2. VEÍCULOS
+        # 2. VEÍCULOS (COM BOTÕES EDITAR E ELIMINAR)
         elif self.tipo_consulta == "Veiculo":
             self.scroll = ctk.CTkScrollableFrame(self)
             self.scroll.pack(fill="both", expand=True, padx=15, pady=(0, 10))
@@ -137,14 +137,26 @@ class ConsultaView(ctk.CTkFrame):
                 dono = veic["nome_cliente"] or "Sem Proprietário Associado"
                 ctk.CTkLabel(f_info, text=f"👤 Proprietário: {dono}", font=("Arial", 12), text_color="#AAAAAA").pack(anchor="w", pady=(2, 0))
 
+                f_botoes = ctk.CTkFrame(card, fg_color="transparent")
+                f_botoes.pack(side="right", padx=15)
+
                 ctk.CTkButton(
-                    card,
+                    f_botoes,
+                    text="Editar",
+                    width=70,
+                    fg_color="#F39C12",
+                    hover_color="#D68910",
+                    command=lambda v=veic: self.modal_editar_veiculo(v),
+                ).pack(side="left", padx=4)
+
+                ctk.CTkButton(
+                    f_botoes,
                     text="Eliminar",
                     fg_color="#C0392B",
                     hover_color="#922B21",
-                    width=80,
+                    width=70,
                     command=lambda vid=veic["id"]: self.eliminar_veiculo(vid),
-                ).pack(side="right", padx=15)
+                ).pack(side="left", padx=4)
 
         # 3. PROCESSOS
         elif self.tipo_consulta == "Processo":
@@ -670,6 +682,79 @@ class ConsultaView(ctk.CTkFrame):
                 conn.close()
 
         ctk.CTkButton(win, text="Guardar Veículo", fg_color="#27AE60", command=submeter).pack(pady=15)
+
+    def modal_editar_veiculo(self, veic):
+        conn = obter_conexao()
+        cursor = conn.cursor(dictionary=True)
+        cursor.execute("SELECT id, nome FROM clientes ORDER BY nome ASC")
+        clientes = cursor.fetchall()
+        cursor.close()
+        conn.close()
+
+        win = ctk.CTkToplevel(self)
+        win.title(f"Editar Veículo - {veic['matricula']}")
+        win.geometry("400x380")
+        win.resizable(False, False)
+        win.grab_set()
+
+        ctk.CTkLabel(win, text="✏️ Editar Dados do Veículo", font=("Arial", 15, "bold")).pack(pady=15)
+
+        entry_mat = ctk.CTkEntry(win, placeholder_text="Matrícula (ex: 00-AA-00)")
+        entry_mat.insert(0, veic["matricula"] or "")
+        entry_mat.pack(fill="x", padx=20, pady=5)
+
+        entry_marca = ctk.CTkEntry(win, placeholder_text="Marca")
+        entry_marca.insert(0, veic["marca"] or "")
+        entry_marca.pack(fill="x", padx=20, pady=5)
+
+        entry_modelo = ctk.CTkEntry(win, placeholder_text="Modelo")
+        entry_modelo.insert(0, veic["modelo"] or "")
+        entry_modelo.pack(fill="x", padx=20, pady=5)
+
+        dict_clientes = {"Nenhum": None}
+        opcoes_combo = ["Nenhum"]
+        dono_atual = "Nenhum"
+
+        for c in clientes:
+            dict_clientes[c["nome"]] = c["id"]
+            opcoes_combo.append(c["nome"])
+            if c["id"] == veic.get("cliente_id"):
+                dono_atual = c["nome"]
+
+        combo_cliente = ctk.CTkOptionMenu(win, values=opcoes_combo)
+        combo_cliente.set(dono_atual)
+        combo_cliente.pack(fill="x", padx=20, pady=5)
+
+        lbl_erro = ctk.CTkLabel(win, text="", text_color="red")
+        lbl_erro.pack(pady=2)
+
+        def submeter():
+            mat = entry_mat.get().strip().upper()
+            marca = entry_marca.get().strip()
+            modelo = entry_modelo.get().strip()
+            cliente_id = dict_clientes.get(combo_cliente.get())
+
+            if not mat or not marca or not modelo:
+                lbl_erro.configure(text="Matrícula, Marca e Modelo são obrigatórios!")
+                return
+
+            conn = obter_conexao()
+            cursor = conn.cursor()
+            try:
+                cursor.execute(
+                    "UPDATE veiculos SET matricula = %s, marca = %s, modelo = %s, cliente_id = %s WHERE id = %s",
+                    (mat, marca, modelo, cliente_id, veic["id"]),
+                )
+                conn.commit()
+                win.destroy()
+                self.carregar_dados()
+            except Exception:
+                lbl_erro.configure(text="Erro ao atualizar (Matrícula duplicada?)")
+            finally:
+                cursor.close()
+                conn.close()
+
+        ctk.CTkButton(win, text="Atualizar Veículo", fg_color="#F39C12", hover_color="#D68910", command=submeter).pack(pady=15)
 
     def confirmar_eliminar_processo(self, processo_id):
         win_confirm = ctk.CTkToplevel(self)

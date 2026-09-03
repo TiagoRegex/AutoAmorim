@@ -1,0 +1,26 @@
+# Ambiente Virtual Python
+.venv/
+env/
+venv/
+
+# Cache do Python
+__pycache__/
+*.pyc
+*.pyo
+
+# Configurações e Segredos Locais
+.env
+*.env.local
+
+# Ficheiros e Pastas de Compilação (Auto PY to EXE / PyInstaller)
+build/
+dist/
+output/
+*.spec
+
+# Logs e Ficheiros Temporários
+*.log
+
+# Arquivos Compactados (devem ser colocados em Releases, não no repo)
+*.zip
+*.rar

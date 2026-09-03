@@ -4,7 +4,7 @@ import requests
 
 # API Key da Resend
 # Conta gratuita em resend.com para obter uma chave
-RESEND_API_KEY = "re_INSIRA_A_SUA_CHAVE_AQUI"
+RESEND_API_KEY = "re_SUA_CHAVE_AQUI"
 
 def enviar_fatura_email(destinatario_email, nome_cliente, matricula, caminho_pdf):
     """

@@ -28,7 +28,7 @@ Para testar o envio transacional de faturas em PDF por e-mail:
 RESEND_API_KEY = "re_SUA_CHAVE_AQUI"
 ```
 
----
+---gi
 
 ## ⚙️ Pré-requisitos do Sistema
 
@@ -79,23 +79,28 @@ RESEND_API_KEY = "re_SUA_CHAVE_AQUI"
 
 ```plaintext
 AutoAmorimV6/
-├── app.py                      # Ponto de entrada do sistema
-├── assets/                     # Recursos visuais (Logótipos, ícones e temas)
-│   ├── logo_AutoAmorim.png     # Logótipo da Topbar
-│   ├── logo_AutoAmorim_Fatura.png # Logótipo com fundo escuro para a fatura PDF
-│   └── AUTO.ico                # Ícone do executável
-├── database/                   # Camada de persistência
-│   ├── database.py             # Conexão MySQL (com use_pure=True e reconexão)
-│   └── schema.sql              # Estrutura DDL e utilizador inicial
-├── services/                   # Serviços e integrações externas
-│   └── email_service.py        # Módulo de envio de e-mails via API REST
-├── views/                      # Camada de interface gráfica (MVC)
-│   ├── login.py                # Ecrã de autenticação
-│   ├── main.py                 # Navbar, Sidebar protegida por PIN e Router
-│   ├── processos.py            # Ordem de trabalho com auto-save contínuo
-│   ├── faturacao.py            # Emissão e envio de faturas comerciais
-│   └── consultas.py            # Gestão CRUD de entidades
-└── README.md                   # Manual de instalação e execução
+├─ app.py            # Ponto de entrada (Main Loop e inicialização da BD)
+├─ .env.example      # Modelo de configuração e variáveis de ambiente (sem segredos)
+├─ .gitignore        # Regras de exclusão de binários, ambientes virtuais e credenciais
+├─ assets/           # Recursos visuais (Logótipos, ícones e temas)
+│  ├─ AUTO.ico                    # Ícone da aplicação e do executável
+│  ├─ logo_AutoAmorim.png         # Logótipo da Topbar e interface
+│  └─ logo_AutoAmorim_Fatura.png  # Logótipo com fundo adaptado para a fatura PDF
+├─ database/                   # Camada de persistência de dados
+│  ├─ database.py             # Gestão de conexões MySQL (com use_pure=True)
+│  └─ schema.sql              # Script DDL de criação e população inicial das tabelas
+├─ services/                  # Camada de integrações externas e serviços
+│   └─ email_service.py       # Integração REST API Resend para envio do PDF
+├─ views/                     # Camada de interface gráfica (Views e Diálogos)
+│  ├─ login.py                # Ecrã de autenticação inicial
+│  ├─ main.py                 # Janela principal, Navbar, Sidebar com PIN e Router
+│  ├─ processos.py            # Ecrã de trabalho mecânico com Auto-Save em tempo real
+│  ├─ consultas.py            # Gestão CRUD de Clientes, Veículos, Stock e Utilizadores
+│  ├─ faturacao.py            # Ecrã fiscal com cálculo de IVA (0%/23%) e emissão PDF
+│  ├─ novo_servico.py         # Modal rápido de registo de cliente e viatura
+│  └─ dialogs.py              # Caixas de diálogo e confirmações personalizadas
+└─ README.md                  # Documentação técnica, manual de instalação e execução
+
 ```
 
 ---

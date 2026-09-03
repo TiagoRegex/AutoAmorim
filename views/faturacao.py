@@ -96,6 +96,7 @@ class FaturacaoView(ctk.CTkFrame):
             text="Introduza o número de um processo para carregar os dados.",
             font=("Arial", 12),
             text_color="gray",
+            justify="left",
         )
         self.lbl_detalhes.pack(anchor="w", padx=15, pady=10)
 
@@ -240,10 +241,14 @@ class FaturacaoView(ctk.CTkFrame):
             else "Nenhuma peça solicitada."
         )
 
+        solic = proc.get("solicitacao_cliente") or "---"
+        relat = proc.get("relatorio") or "Nenhum relatório técnico registado."
+
         texto_detalhes = (
             f"🚗 Veículo: {proc['matricula'].upper()} ({proc['marca']} {proc['modelo']}) | "
             f"👤 Cliente: {proc['cliente_nome'] or 'Consumidor Final'}\n"
-            f"📝 Solicitação: {proc['solicitacao_cliente'] or '---'}\n"
+            f"📝 Solicitação: {solic}\n"
+            f"🔧 Relatório Técnico: {relat}\n"
             f"📦 Peças Stock ({qtd_pecas} pedido(s)): {desc_pecas}"
         )
         self.lbl_detalhes.configure(text=texto_detalhes, text_color="white")

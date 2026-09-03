@@ -1,0 +1,19 @@
+# Ambiente Virtual Python
+.venv/
+env/
+venv/
+
+# Cache do Python
+__pycache__/
+*.pyc
+
+# Ficheiros temporários de compilação
+build/
+*.spec
+
+# Base de Dados local ou logs temporários
+*.log
+
+# Opcional: Se quiseres disponibilizar o executável no Git, remove a linha abaixo.
+# Se preferires que o Git tenha APENAS o código-fonte, mantém:
+# output/

@@ -42,9 +42,9 @@ RESEND_API_KEY = "re_SUA_CHAVE_AQUI"
 
 ### Opção A: Através do Executável (.EXE)
 1. Certifique-se de que o serviço MySQL está ativo.
-2. Aceda à pasta `output/AutoAmorim` (ou diretório do executável distribuído).
-3. Execute o ficheiro `AutoAmorim.exe`.
-*Nota: A aplicação deteta e provisiona automaticamente a base de dados `autoamorim_db`, as tabelas e o utilizador `admin` no primeiro arranque.*
+2. Descarregue a versão compilada na secção [Releases do GitHub](https://github.com/TiagoRegex/AutoAmorim/releases/latest).
+3. Extraia o ficheiro `.zip` e execute o ficheiro `AutoAmorim.exe`.
+   *(Nota: A aplicação deteta e provisiona automaticamente a base de dados `autoamorim_db`, as tabelas e o utilizador `admin` no primeiro arranque).*
 
 ### Opção B: Através do Código-Fonte (Python)
 1. No terminal do projeto, ative o ambiente virtual:
